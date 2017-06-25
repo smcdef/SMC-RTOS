@@ -1,0 +1,13 @@
+Listings/*
+Objects/*
+RTE/*
+.tags
+*.uvprojx
+*.uvproj
+*.uvoptx
+*.sublime-workspace
+*.sublime-project
+*.tag
+*.SMC
+.tags_sorted_by_file
+Fly*
