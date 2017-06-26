@@ -14,7 +14,7 @@
 #include "smc_cpu.h"
 
 static void (*smc_scheduler_hook)(void) = NULL;
-static smc_uint32_t smc_bitmap_group;                  /* thread priority bit map */
+smc_uint32_t smc_bitmap_group = 0;                     /* thread priority bit map */
 static smc_uint8_t smc_scheduler_lock_count = 0;       /* the scheduler lock nest */
 static volatile smc_uint8_t smc_interrupt_nest = 0;
 
@@ -30,40 +30,9 @@ static volatile smc_uint8_t smc_interrupt_nest = 0;
  */
 __asm static smc_uint32_t __bit_search(smc_uint32_t value)
 {
-    CMP     R0, #0x00
-    BEQ     exit
     RBIT    R0, R0                            /* reversal RO for bit */
     CLZ     R0, R0                            /* Count Leading Zeros */
-exit
     BX      LR
-}
-
-/**
- * The function init bitmap group
- */
-static void smc_bitmap_init(void)
-{
-	smc_bitmap_group = 0;
-}
-
-/**
- * The function will set a bit according to thread priority
- *
- * @param prio [the thread priority]
- */
-void smc_bitmap_set(smc_uint8_t prio)
-{
-	smc_bitmap_group |= (1 << prio);
-}
-
-/**
- * The function will clear a bit according to thread priority
- *
- * @param prio [the thread priority]
- */
-void smc_bitmap_clear(smc_uint8_t prio)
-{
-	smc_bitmap_group &= ~(1 << prio);
 }
 
 /**
@@ -148,7 +117,6 @@ void smc_rtos_init(void)
 
 	for (i = 0; i < SMC_PRIORITY_MAX; i++)
 		smc_list_node_init(&smc_list_head_table[i]);
-	smc_bitmap_init();
 }
 
 /**
@@ -158,6 +126,8 @@ void smc_rtos_scheduler(void)
 {
 	smc_thread_current = NULL;
 	smc_thread_ready   = smc_thread_highest_ready();
+	
+	/* It only for the first context switch */
 	smc_thread_switch_to();
 }
 

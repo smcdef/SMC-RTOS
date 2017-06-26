@@ -16,19 +16,21 @@
 extern "C" {
 #endif
 
+extern smc_uint32_t smc_bitmap_group;                     /* thread priority bit map */
+
 /**
  * The function will set a bit according to thread priority
  *
  * @param prio [the thread priority]
  */
-void smc_bitmap_set(smc_uint8_t prio);
+#define smc_bitmap_set(prio)      (smc_bitmap_group |= (1 << prio))
 
 /**
  * The function will clear a bit according to thread priority
  *
  * @param prio [the thread priority]
  */
-void smc_bitmap_clear(smc_uint8_t prio);
+#define smc_bitmap_clear(prio)    (smc_bitmap_group &= ~(1 << prio))
 
 /**
  * The function will get the highest priority

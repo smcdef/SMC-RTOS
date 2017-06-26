@@ -135,23 +135,6 @@ smc_inline int smc_list_is_empty(const struct smc_list_node *node)
 #define smc_list_first_entry(ptr, type, member) \
 	smc_list_entry((ptr)->next, type, member)
 
-typedef int(*process_func_t)(smc_list_node_t *node, void *parameter);
-/**
- * [smc_list_for_each_process]
- * the function call node_process_f() for each node from the head, if
- * you want early termination for the specified node, you can make
- * node_process_f() return -1, otherwise return 0.
- *
- * @param  head           [the head for your list]
- * @param  node_process_f [the function for each node will be call]
- * @param  parameter      [the function's parameter]
- *
- * @return                [0 if all node to call node_process_f(), -1 if not]
- */
-int smc_list_for_each_process(smc_list_head_t *head,
-                              process_func_t node_process_f,
-                              void *parameter);
-
 #ifdef __cplusplus
 }
 #endif
