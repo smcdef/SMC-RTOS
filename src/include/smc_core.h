@@ -85,6 +85,20 @@ void smc_enter_interrupt(void);
  */
 void smc_exit_interrupt(void);
 
+/**
+ * Using cpu usage for SMC-RTOS
+ */
+#ifdef SMC_USING_CPU_USAGE
+
+/**
+ * This function will return cpu usage
+ *
+ * @return  [cpu usage]
+ */
+smc_uint8_t smc_get_cpu_usage(void);
+
+#endif
+
 #ifdef __cplusplus
 }
 #endif

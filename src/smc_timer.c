@@ -89,7 +89,8 @@ static void smc_timer_insert_list(smc_timer_t *timer_insert, smc_uint32_t tick)
  */
 void smc_timer_enable(smc_timer_t *timer)
 {
-	smc_timer_insert_list(timer, timer->timeout_tick);
+	if (timer->flag != SMC_TIMER_DISABLE)
+		smc_timer_insert_list(timer, timer->timeout_tick);
 }
 
 /**

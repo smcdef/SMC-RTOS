@@ -11,8 +11,8 @@
 #include "smc_core.h"
 #include "smc_timer.h"
 
-smc_thread_t *smc_thread_current;                      /* point to current thread structure */
-smc_thread_t *smc_thread_ready;                        /* point to highest priority thread structure */
+smc_thread_t *smc_thread_current;                        /* point to current thread structure          */
+smc_thread_t *smc_thread_ready;                          /* point to highest priority thread structure */
 smc_list_head_t smc_list_head_table[SMC_PRIORITY_MAX];   /* ready thread header node for each priority */
 
 /**

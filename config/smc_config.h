@@ -18,5 +18,6 @@
  * user module configration
  */
 #define SMC_USING_SEMAPHORE                   /* using semaphore for SMC-RTOS */
+#define SMC_USING_CPU_USAGE                   /* using cpu usage for SMC-RTOS */
 
 #endif // SMC_CONFIG_H
