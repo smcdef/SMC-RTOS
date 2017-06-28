@@ -30,7 +30,7 @@ static smc_uint32_t smc_idle_cnt_run = 0;      /* Val reached by idle cnt at run
 static smc_timer_t smc_idle_timer;             /* smc_idle_timer computes the cpu usage        */
 
 /**
- * This function will computes the cpu usage
+ * This function will computes the percentage of cpu usage
  *
  * @param parameter [NULL]
  */
@@ -44,9 +44,6 @@ static void smc_idle_timeout(void *parameter)
 
 		smc_idle_cnt_max = smc_idle_cnt_run / 10U;
 
-		/* Reset the idle counter for the next second */
-		smc_idle_cnt_run = 0;
-
 		/* Set timer timeout tick for 1 second */
 		smc_timer_command(&smc_idle_timer,
 		                  SMC_TIMER_SET_TIMEOUT_TICK_IMMEDIATELY,
@@ -57,14 +54,13 @@ static void smc_idle_timeout(void *parameter)
 	} else {
 		/* Computes the cpu usage */
 		smc_cpu_usage = 100U - smc_idle_cnt_run / smc_idle_cnt_max;
-
-		/* Reset the idle counter for the next second */
-		smc_idle_cnt_run = 0;
 	}
+	/* Reset the idle counter for the next second */
+	smc_idle_cnt_run = 0;
 }
 
 /**
- * This function will lock scheduler, and creat a timer for 100ms to
+ * This function will lock scheduler, and create a timer for 100ms to
  * establish the maximum value for the idle counter.
  */
 static void smc_cpu_usage_init(void)
@@ -72,7 +68,7 @@ static void smc_cpu_usage_init(void)
 	/* Scheduler lock to establish the maximum value for the idle counter */
 	smc_scheduler_lock();
 
-	/* Creat a timer for 100ms to establish the maximum value for the idle counter in 100ms */
+	/* Create a timer for 100ms to establish the maximum value for the idle counter in 100ms */
 	smc_timer_init(&smc_idle_timer,
 	               SMC_TICKS_PER_SECOND / 10,
 	               smc_idle_timeout,
@@ -86,7 +82,7 @@ static void smc_cpu_usage_init(void)
 /**
  * This function will return cpu usage
  *
- * @return  [cpu usage]
+ * @return  [Percentage of cpu usage]
  */
 smc_uint8_t smc_get_cpu_usage(void)
 {

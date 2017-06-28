@@ -60,6 +60,9 @@ smc_stack_t *smc_thread_stack_init(void (*entry)(void *parameter),
                                    void *parameter,
                                    smc_stack_t *stack_addr)
 {
+	/* Align the stack to 8-bytes */
+	stack_addr = (smc_stack_t *)SMC_ALIGN_DOWN((smc_stack_t)stack_addr, 8);
+	
 	*(--stack_addr) = (smc_stack_t)(1 << 24);     /* xPSR                                       */
 	*(--stack_addr) = (smc_stack_t)entry;         /* R15 (PC) (Entry Point)                     */
 	*(--stack_addr) = (smc_stack_t)0;             /* R14 (LR)                                   */
