@@ -185,6 +185,11 @@ smc_int32_t smc_thread_resume(smc_thread_t *thread)
 	/* delete thread from the any queue */
 	smc_list_del_entry(&thread->rlist);
 
+	/**
+	 * remove current thread timer from timer list
+	 */
+	smc_timer_disable(&thread->timer);
+
 	/* put thread to end of ready queue */
 	smc_list_add(&thread->rlist,
 	             &(smc_list_head_table[thread->priority]));

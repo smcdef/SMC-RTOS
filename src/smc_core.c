@@ -113,7 +113,7 @@ void smc_scheduler_unlock(void)
  */
 void smc_rtos_init(void)
 {
-	smc_int32_t i;
+	smc_uint16_t i;
 
 	for (i = 0; i < SMC_PRIORITY_MAX; i++)
 		smc_list_node_init(&smc_list_head_table[i]);
@@ -125,7 +125,18 @@ void smc_rtos_init(void)
 void smc_rtos_scheduler(void)
 {
 	smc_thread_current = NULL;
-	smc_thread_ready   = smc_thread_highest_ready();
+
+	/**
+	 * If using cpu usage module, the first thread which will run is idle thread to
+	 * establish the maximum value for the idle counter.
+	 */
+#ifdef SMC_USING_CPU_USAGE
+	smc_thread_ready = smc_list_entry(smc_list_head_table[SMC_PRIORITY_MAX - 1].next,
+	                                  smc_thread_t,
+	                                  rlist);
+#else
+	smc_thread_ready = smc_thread_highest_ready();
+#endif
 	
 	/* It only for the first context switch */
 	smc_thread_switch_to();

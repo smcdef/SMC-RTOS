@@ -23,7 +23,7 @@ static void (*smc_thread_idle_hook)(void) = NULL;
  */
 #ifdef SMC_USING_CPU_USAGE
 
-static smc_uint8_t smc_cpu_usage = 0;          /* Percentage of cpu used                       */
+static smc_uint8_t smc_cpu_usage     = 0;      /* Percentage of cpu used                       */
 static smc_uint32_t smc_idle_cnt_max = 0;      /* Max value that idle cnt can take in 1 sec    */
 static smc_uint32_t smc_idle_cnt_run = 0;      /* Val reached by idle cnt at run time in 1 sec */
 
@@ -52,8 +52,11 @@ static void smc_idle_timeout(void *parameter)
 		/* do scheduler */
 		smc_scheduler_unlock();
 	} else {
+		smc_int8_t usage;
+
 		/* Computes the cpu usage */
-		smc_cpu_usage = 100U - smc_idle_cnt_run / smc_idle_cnt_max;
+		usage         = (smc_int8_t)(100U - smc_idle_cnt_run / smc_idle_cnt_max);
+		smc_cpu_usage = usage > 0 ? usage : 0;
 	}
 	/* Reset the idle counter for the next second */
 	smc_idle_cnt_run = 0;
@@ -80,7 +83,7 @@ static void smc_cpu_usage_init(void)
 }
 
 /**
- * This function will return cpu usage
+ * This function will return percentage of cpu usage
  *
  * @return  [Percentage of cpu usage]
  */

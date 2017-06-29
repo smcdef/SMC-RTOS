@@ -116,11 +116,6 @@ smc_int32_t smc_sem_release(smc_sem_t *sem)
 		 * the special semaphore.
 		 */
 		smc_thread_resume(thread);
-
-		/**
-		 * remove current thread timer from timer list
-		 */
-		smc_timer_disable(&thread->timer);
 	} else {
 		sem->value++;
 	}

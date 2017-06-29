@@ -25,6 +25,7 @@ int time1_loop;
 static void timeout1(void *parameter)
 {
 	time1_loop = !time1_loop;
+	smc_sem_release(&sem);
 }
 
 static void delay(unsigned int dly)
@@ -36,10 +37,8 @@ int task1_togo;
 static void task1_thread_entry(void *param)
 {
 	while (1) {
-		task1_togo = 0;
-		smc_thread_delay(2);
-		task1_togo = 1;
-		smc_thread_delay(2);
+		task1_togo = !task1_togo;
+		smc_sem_pend(&sem, SMC_SEM_WAIT_FOREVER);
 	}
 }
 
@@ -89,7 +88,7 @@ void smc_app_init(void)
 	                sizeof(task3_stack),
 	                20);
 	smc_timer_init(&timer1,
-	               1,
+	               2,
 	               timeout1,
 	               NULL,
 	               SMC_TIMER_PERIODIC);
