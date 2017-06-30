@@ -127,11 +127,17 @@ void smc_idle_thread_init(void)
  */
 void idle_thread_entry(void *parameter)
 {
+/**
+ * Using cpu usage for SMC-RTOS
+ */
 #ifdef SMC_USING_CPU_USAGE
 	smc_cpu_usage_init();
 #endif
 
 	while (1) {
+/**
+ * Using cpu usage for SMC-RTOS
+ */
 #ifdef SMC_USING_CPU_USAGE
 		smc_int32_t status;
 

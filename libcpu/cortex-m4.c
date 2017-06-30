@@ -53,7 +53,7 @@ PendSV_Handler_Nosave
 	STR R3, [R2]
 	MSR PSP, R3
 	
-	ORR LR, LR, #0x04
+	ORR LR, LR, #0x04                /* Use PSP */
 	CPSIE   I                        /* Enable intrrupr */
 	BX LR
 	NOP
@@ -198,4 +198,22 @@ __asm void smc_cpu_enable_interrupt(smc_uint32_t status)
 {
 	MSR     PRIMASK, R0
     BX      LR
+}
+
+/**
+ * This function will delay some microseconds(us).
+ *
+ * @param us [Delay time]
+ */
+void smc_cpu_us_delay(smc_uint32_t us)
+{
+	smc_uint32_t delta;
+
+	/* Get delay timer count */
+	us = us * (SysTick->LOAD / (1000000 / SMC_TIMER_PERIODIC));
+	
+	/* Get current timer count */
+	delta = SysTick->VAL;
+
+	while (delta - SysTick->VAL < us);
 }
