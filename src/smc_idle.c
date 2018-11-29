@@ -16,18 +16,18 @@
  */
 static struct smc_thread smc_thread_idle;
 static smc_uint8_t smc_idle_thread_stack[SMC_IDLE_STACK_SIZE];
-static void (*smc_thread_idle_hook)(void) = NULL;
+static void (*smc_thread_idle_hook)(void);
 
 /**
  * Using cpu usage for SMC-RTOS
  */
 #ifdef SMC_USING_CPU_USAGE
 
-static smc_uint8_t smc_cpu_usage     = 0;      /* Percentage of cpu used                       */
-static smc_uint32_t smc_idle_cnt_max = 0;      /* Max value that idle cnt can take in 1 sec    */
-static smc_uint32_t smc_idle_cnt_run = 0;      /* Val reached by idle cnt at run time in 1 sec */
+static smc_uint8_t smc_cpu_usage;	/* Percentage of cpu used                       */
+static smc_uint32_t smc_idle_cnt_max;	/* Max value that idle cnt can take in 1 sec    */
+static smc_uint32_t smc_idle_cnt_run;	/* Val reached by idle cnt at run time in 1 sec */
 
-static smc_timer_t smc_idle_timer;             /* smc_idle_timer computes the cpu usage        */
+static smc_timer_t smc_idle_timer;	/* smc_idle_timer computes the cpu usage        */
 
 /**
  * This function will computes the percentage of cpu usage
@@ -71,7 +71,10 @@ static void smc_cpu_usage_init(void)
 	/* Scheduler lock to establish the maximum value for the idle counter */
 	smc_scheduler_lock();
 
-	/* Create a timer for 100ms to establish the maximum value for the idle counter in 100ms */
+	/*
+	 * Create a timer for 100ms to establish the maximum
+	 * value for the idle counter in 100ms
+	 * */
 	smc_timer_init(&smc_idle_timer,
 	               SMC_TICKS_PER_SECOND / 10,
 	               smc_idle_timeout,
@@ -94,7 +97,7 @@ smc_uint8_t smc_get_cpu_usage(void)
 
 #endif
 /**
- * This function sets a hook function to idle thread loop. When the system performs 
+ * This function sets a hook function to idle thread loop. When the system performs
  * idle loop, this hook function should be invoked.
  *
  * @param hook [the specified hook function]
@@ -103,7 +106,7 @@ smc_uint8_t smc_get_cpu_usage(void)
  */
 void smc_thread_idle_sethook(void (*hook)(void))
 {
-    smc_thread_idle_hook = hook;
+	smc_thread_idle_hook = hook;
 }
 
 /**

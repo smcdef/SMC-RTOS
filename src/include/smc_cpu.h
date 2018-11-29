@@ -50,7 +50,7 @@ smc_stack_t *smc_thread_stack_init(void (*entry)(void *parameter),
  *
  */
 void smc_thread_switch(void);
-								   
+
 /**
  * This function will make context switch.
  *
@@ -58,7 +58,7 @@ void smc_thread_switch(void);
  *
  */
 void smc_thread_intrrupt_switch(void);
-								   
+
 /**
  * This function will perform one schedule. It will select one thread
  * with the highest priority level, then switch to it. It only for the
@@ -72,7 +72,7 @@ void smc_thread_switch_to(void);
  * @param us [Delay time]
  */
 void smc_cpu_us_delay(smc_uint32_t us);
-					   
+
 #ifdef __cplusplus
 }
 #endif

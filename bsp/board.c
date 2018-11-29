@@ -25,9 +25,9 @@ void SysTick_Handler(void)
 {
 	/* enter interrupt */
 	smc_enter_interrupt();
-	
+
 	smc_time_tick();
-	
+
 	/* exit interrupt */
 	smc_exit_interrupt();
 }

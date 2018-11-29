@@ -13,10 +13,10 @@
 #include "smc_timer.h"
 #include "smc_cpu.h"
 
-static void (*smc_scheduler_hook)(void) = NULL;
-smc_uint32_t smc_bitmap_group = 0;                     /* thread priority bit map */
-static smc_uint8_t smc_scheduler_lock_count = 0;       /* the scheduler lock nest */
-static volatile smc_uint8_t smc_interrupt_nest = 0;
+static void (*smc_scheduler_hook)(void);
+smc_uint32_t smc_bitmap_group;                     /* thread priority bit map */
+static smc_uint8_t smc_scheduler_lock_count;       /* the scheduler lock nest */
+static volatile smc_uint8_t smc_interrupt_nest;
 
 /**
  * This function finds the first bit set (beginning with the least significant bit)
@@ -30,9 +30,9 @@ static volatile smc_uint8_t smc_interrupt_nest = 0;
  */
 __asm static smc_uint32_t __bit_search(smc_uint32_t value)
 {
-    RBIT    R0, R0                            /* reversal RO for bit */
-    CLZ     R0, R0                            /* Count Leading Zeros */
-    BX      LR
+	RBIT    R0, R0                            /* reversal RO for bit */
+	CLZ     R0, R0                            /* Count Leading Zeros */
+	BX      LR
 }
 
 /**
@@ -63,22 +63,24 @@ void smc_time_tick(void)
  */
 void smc_scheduler(void)
 {
-	if (smc_scheduler_lock_count == 0U) {
-		smc_uint32_t status = smc_cpu_disable_interrupt();
+	smc_uint32_t status;
 
-		smc_thread_ready = smc_thread_highest_ready();
-		smc_cpu_enable_interrupt(status);
+	if (smc_scheduler_lock_count)
+		return;
 
-		/* if the destination thread is not the same as current thread */
-		if (smc_thread_current != smc_thread_ready) {
-			if (smc_scheduler_hook)
-				smc_scheduler_hook();
-			/* switch to new thread */
-			if (smc_interrupt_nest > 0U)
-				smc_thread_intrrupt_switch();
-			else
-				smc_thread_switch();
-		}
+	status = smc_cpu_disable_interrupt();
+	smc_thread_ready = smc_thread_highest_ready();
+	smc_cpu_enable_interrupt(status);
+
+	/* if the destination thread is not the same as current thread */
+	if (smc_thread_current != smc_thread_ready) {
+		if (smc_scheduler_hook)
+			smc_scheduler_hook();
+		/* switch to new thread */
+		if (smc_interrupt_nest > 0U)
+			smc_thread_intrrupt_switch();
+		else
+			smc_thread_switch();
 	}
 }
 
@@ -137,13 +139,13 @@ void smc_rtos_scheduler(void)
 #else
 	smc_thread_ready = smc_thread_highest_ready();
 #endif
-	
+
 	/* It only for the first context switch */
 	smc_thread_switch_to();
 }
 
 /**
- * This function sets a hook function to thread scheduler. When the system performs 
+ * This function sets a hook function to thread scheduler. When the system performs
  * thread scheduler, this hook function should be invoked.
  *
  * @param hook [the specified hook function]
@@ -163,13 +165,13 @@ void smc_scheduler_sethook(void (*hook)(void))
  */
 void smc_enter_interrupt(void)
 {
-    smc_int32_t status;
+	smc_int32_t status;
 
 	/* disable intrrupt */
 	status = smc_cpu_disable_interrupt();
-    smc_interrupt_nest++;
+	smc_interrupt_nest++;
 	/* enable intrrupt */
-    smc_cpu_enable_interrupt(status);
+	smc_cpu_enable_interrupt(status);
 }
 
 /**
@@ -180,12 +182,12 @@ void smc_enter_interrupt(void)
  */
 void smc_exit_interrupt(void)
 {
-    smc_int32_t status;
+	smc_int32_t status;
 
 	/* disable intrrupt */
 	status = smc_cpu_disable_interrupt();
-    smc_interrupt_nest--;
+	smc_interrupt_nest--;
 	/* enable intrrupt */
-    smc_cpu_enable_interrupt(status);
+	smc_cpu_enable_interrupt(status);
 }
 

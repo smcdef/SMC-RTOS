@@ -60,7 +60,7 @@ void smc_rtos_init(void);
 void smc_rtos_scheduler(void);
 
 /**
- * This function sets a hook function to thread scheduler. When the system performs 
+ * This function sets a hook function to thread scheduler. When the system performs
  * thread scheduler, this hook function should be invoked.
  *
  * @param hook [the specified hook function]

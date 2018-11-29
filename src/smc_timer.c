@@ -12,10 +12,10 @@
 #include "smc_cpu.h"
 #include "smc_core.h"
 
-static smc_list_head_t smc_timer_resume_list = 
+static smc_list_head_t smc_timer_resume_list =
 	LIST_NODE_INIT(smc_timer_resume_list);                /* Timer need to resume  list */
 
-static smc_list_head_t smc_timer_list = 
+static smc_list_head_t smc_timer_list =
 	LIST_NODE_INIT(smc_timer_list);                       /* thread for all need to delay list head */
 
 /**
@@ -118,7 +118,7 @@ void smc_timer_disable(smc_timer_t *timer_del)
 		}
 	}
 	timer_del->flag = SMC_TIMER_DISABLE;
-	
+
 	smc_list_del_entry(&timer_del->tlist);
 
 	/* enable interrupt */
@@ -138,7 +138,7 @@ void smc_timer_command(smc_timer_t *timer, smc_uint8_t cmd, void *arg)
 
 	/* disable interrupt */
 	status = smc_cpu_disable_interrupt();
-	
+
 	switch (cmd) {
 	case SMC_TIMER_SET_TIMEOUT_TICK_AFTER:
 		timer->timeout_tick = *(smc_uint32_t *)arg;
@@ -189,40 +189,43 @@ static void smc_timer_process(smc_timer_t *timer)
  */
 void smc_timer_decrease(void)
 {
-	if (!smc_list_is_empty(&smc_timer_list)) {
-		smc_timer_t *timer;
-		smc_list_node_t *pos = smc_timer_list.next;
-		smc_uint32_t status = smc_cpu_disable_interrupt();
+	smc_timer_t *timer;
+	smc_list_node_t *pos = smc_timer_list.next;
+	smc_uint32_t status = smc_cpu_disable_interrupt();
 
-		timer = smc_list_entry(pos, smc_timer_t, tlist);
-		timer->init_tick--;
-
-		/* put all thread of that delay tick is 0 to ready queue */
-		while ((timer->init_tick == 0) && (pos != &smc_timer_list)) {
-			pos = pos->next;
-			smc_timer_process(timer);
-			timer->timerout(timer->parameter);
-			timer = smc_list_entry(pos, smc_timer_t, tlist);
-		}
-
-		/* If there is a periodic timer, re-insert it into the timer delay list */
-		if (!smc_list_is_empty(&smc_timer_resume_list)) {
-			smc_list_node_t *pos = smc_timer_resume_list.next;
-			smc_timer_t *timer;
-
-			while (pos != &smc_timer_resume_list) {
-				pos = pos->next;
-				timer = smc_list_entry(pos->prev, smc_timer_t, tlist);
-				smc_timer_insert_list(timer, timer->timeout_tick);
-				smc_timer_process(timer);
-			}
-			smc_list_node_init(&smc_timer_resume_list);
-		}
-
-		/* enable interrupt */
+	if (smc_list_is_empty(&smc_timer_list)) {
 		smc_cpu_enable_interrupt(status);
-
-		/* do scheduler */
-		smc_scheduler();
+		return;
 	}
+
+	timer = smc_list_entry(pos, smc_timer_t, tlist);
+	timer->init_tick--;
+
+	/* put all thread of that delay tick is 0 to ready queue */
+	while ((timer->init_tick == 0) && (pos != &smc_timer_list)) {
+		pos = pos->next;
+		smc_timer_process(timer);
+		timer->timerout(timer->parameter);
+		timer = smc_list_entry(pos, smc_timer_t, tlist);
+	}
+
+	/* If there is a periodic timer, re-insert it into the timer delay list */
+	if (!smc_list_is_empty(&smc_timer_resume_list)) {
+		smc_list_node_t *pos = smc_timer_resume_list.next;
+		smc_timer_t *timer;
+
+		while (pos != &smc_timer_resume_list) {
+			pos = pos->next;
+			timer = smc_list_entry(pos->prev, smc_timer_t, tlist);
+			smc_timer_insert_list(timer, timer->timeout_tick);
+			smc_timer_process(timer);
+		}
+		smc_list_node_init(&smc_timer_resume_list);
+	}
+
+	/* enable interrupt */
+	smc_cpu_enable_interrupt(status);
+
+	/* do scheduler */
+	smc_scheduler();
 }

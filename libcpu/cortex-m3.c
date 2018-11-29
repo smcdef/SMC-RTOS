@@ -62,24 +62,24 @@ smc_stack_t *smc_thread_stack_init(void (*entry)(void *parameter),
 {
 	/* Align the stack to 8-bytes */
 	stack_addr = (smc_stack_t *)SMC_ALIGN_DOWN((smc_stack_t)stack_addr, 8);
-	
-	*(--stack_addr) = (smc_stack_t)(1 << 24);     /* xPSR                                       */
-	*(--stack_addr) = (smc_stack_t)entry;         /* R15 (PC) (Entry Point)                     */
-	*(--stack_addr) = (smc_stack_t)0;             /* R14 (LR)                                   */
-	*(--stack_addr) = (smc_stack_t)0;             /* R12                                        */
-	*(--stack_addr) = (smc_stack_t)0;             /* R3                                         */
-	*(--stack_addr) = (smc_stack_t)0;             /* R2                                         */
-	*(--stack_addr) = (smc_stack_t)0;             /* R1                                         */
-	*(--stack_addr) = (smc_stack_t)parameter;     /* R0 : argument                              */
-	                                              /* Remaining registers saved on process stack */
-	*(--stack_addr) = (smc_stack_t)0;             /* R11                                        */
-	*(--stack_addr) = (smc_stack_t)0;             /* R10                                        */
-	*(--stack_addr) = (smc_stack_t)0;             /* R9                                         */
-	*(--stack_addr) = (smc_stack_t)0;             /* R8                                         */
-	*(--stack_addr) = (smc_stack_t)0;             /* R7                                         */
-	*(--stack_addr) = (smc_stack_t)0;             /* R6                                         */
-	*(--stack_addr) = (smc_stack_t)0;             /* R5                                         */
-	*(--stack_addr) = (smc_stack_t)0;             /* R4                                         */
+
+	*(--stack_addr) = (smc_stack_t)(1 << 24);     /* xPSR		*/
+	*(--stack_addr) = (smc_stack_t)entry;         /* R15 (PC)	*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R14 (LR)	*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R12		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R3		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R2		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R1		*/
+	*(--stack_addr) = (smc_stack_t)parameter;     /* R0 : argument	*/
+	/* Remaining registers saved on process stack */
+	*(--stack_addr) = (smc_stack_t)0;             /* R11		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R10		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R9		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R8		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R7		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R6		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R5		*/
+	*(--stack_addr) = (smc_stack_t)0;             /* R4		*/
 
 	return stack_addr;
 }
@@ -129,8 +129,8 @@ void smc_thread_switch_to(void)
 __asm smc_uint32_t smc_cpu_disable_interrupt(void)
 {
 	MRS     R0, PRIMASK
-    CPSID   I
-    BX      LR
+	CPSID   I
+	BX      LR
 }
 
 /**
@@ -141,7 +141,7 @@ __asm smc_uint32_t smc_cpu_disable_interrupt(void)
 __asm void smc_cpu_enable_interrupt(smc_uint32_t status)
 {
 	MSR     PRIMASK, R0
-    BX      LR
+	BX      LR
 }
 
 /**
@@ -155,7 +155,7 @@ void smc_cpu_us_delay(smc_uint32_t us)
 
 	/* Get delay timer count */
 	us = us * (SysTick->LOAD / (1000000 / SMC_TIMER_PERIODIC));
-	
+
 	/* Get current timer count */
 	delta = SysTick->VAL;
 

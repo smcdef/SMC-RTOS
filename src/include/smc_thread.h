@@ -66,7 +66,7 @@ void smc_scheduler(void);
 
 /**
  * This function will let current thread delay for some ticks.
- * 
+ *
  * @param delay_tick [the delay ticks]
  */
 void smc_thread_delay(smc_uint32_t delay_tick);
@@ -94,7 +94,7 @@ smc_thread_t *smc_thread_highest_ready(void);
  * @param thread [the thread to be suspended]
  *
  * @return       [the operation status, SMC_OK on OK, -SMC_ERROR on error]
- * 
+ *
  * @note         [if suspend self thread, after this function call, the]
  * smc_scheduler() must be invoked.
  */
@@ -111,7 +111,7 @@ smc_int32_t smc_thread_resume(smc_thread_t *thread);
 
 /**
  * @ingroup Hook
- * This function sets a hook function to idle thread loop. When the system performs 
+ * This function sets a hook function to idle thread loop. When the system performs
  * idle loop, this hook function should be invoked.
  *
  * @param hook [the specified hook function]

@@ -18,9 +18,9 @@ void smc_app_init(void);
 void smc_rtos_startup(void)
 {
 	/* init board */
-    smc_hw_board_init();
+	smc_hw_board_init();
 
-    /* init SMC-RTOS */
+	/* init SMC-RTOS */
 	smc_rtos_init();
 
 	/* idle thread init */
@@ -28,7 +28,7 @@ void smc_rtos_startup(void)
 
 	/* user application init */
 	smc_app_init();
-	
+
 	/* start scheduler */
 	smc_rtos_scheduler();
 }

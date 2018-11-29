@@ -22,7 +22,7 @@ extern "C" {
 #ifndef NULL
 #ifdef __cplusplus
 #define NULL                             0
-#else   
+#else
 #define NULL                             ((void *)0)
 #endif
 #endif
@@ -134,7 +134,7 @@ typedef struct smc_thread {
 	void            *sp;                           /* stack point */
 	smc_uint8_t     priority;                      /* thread priotity */
 	smc_uint8_t     stat;                          /* thread state */
-	
+
 	smc_list_node_t rlist;                         /* thread ready list node */
 
 	smc_timer_t     timer;
@@ -149,7 +149,7 @@ typedef struct smc_thread {
  * Semaphore structure
  */
 typedef struct smc_sem {
-	smc_list_head_t slist;                        /* Thread that is suspended for waiting for a semaphore */ 
+	smc_list_head_t slist;                        /* Thread that is suspended for waiting for a semaphore */
 	smc_uint16_t    value;                        /* semaphore value */
 } smc_sem_t;
 #endif

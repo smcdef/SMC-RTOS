@@ -54,10 +54,10 @@ smc_int32_t smc_sem_pend(smc_sem_t *sem, smc_int32_t time_out)
 		} else {
 			/* reset thread error number */
 			smc_thread_current->error_num = SMC_OK;
-			
+
 			/* suspend the current thread and do schedule */
 			smc_thread_suspend(smc_thread_current);
-	
+
 			if (time_out != SMC_SEM_WAIT_FOREVER) {
 				smc_uint8_t flag = SMC_TIMER_ONCE;
 
@@ -112,7 +112,7 @@ smc_int32_t smc_sem_release(smc_sem_t *sem)
 		thread = smc_list_entry(sem->slist.next, smc_thread_t, rlist);
 
 		/**
-		 * resume the first thread in the pending thread list waiting for 
+		 * resume the first thread in the pending thread list waiting for
 		 * the special semaphore.
 		 */
 		smc_thread_resume(thread);

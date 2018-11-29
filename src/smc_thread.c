@@ -54,7 +54,7 @@ void smc_thread_init(smc_thread_t *thread,
 	smc_stack_t *stack_end = (smc_stack_t *)((smc_int8_t *)stack_start + stack_size);
 
 	/* Align the stack to 4-bytes */
-	thread->sp = smc_thread_stack_init(entry, parameter, 
+	thread->sp = smc_thread_stack_init(entry, parameter,
 	                                   (smc_stack_t *)SMC_ALIGN_DOWN((smc_stack_t)stack_end, 4));
 	thread->priority             = priority;
 	thread->init_slice_tick      = slice_tick;
@@ -92,7 +92,7 @@ void smc_thread_abandon(void)
 
 /**
  * This function will let current thread delay for some ticks.
- * 
+ *
  * @param delay_tick [the delay ticks]
  */
 void smc_thread_delay(smc_uint32_t delay_tick)
@@ -100,7 +100,7 @@ void smc_thread_delay(smc_uint32_t delay_tick)
 	smc_uint8_t flag = SMC_TIMER_ONCE;
 
 	smc_thread_suspend(smc_thread_current);
-	
+
 	/* set timer timeout tick */
 	smc_timer_command(&smc_thread_current->timer,
 	                  SMC_TIMER_SET_TIMEOUT_TICK_IMMEDIATELY,
@@ -137,7 +137,7 @@ smc_thread_t *smc_thread_highest_ready(void)
  * @param thread [the thread to be suspended]
  *
  * @return       [the operation status, SMC_OK on OK, -SMC_ERROR on error]
- * 
+ *
  * @note         [if suspend self thread, after this function call, the]
  * smc_scheduler() must be invoked.
  */
@@ -147,10 +147,10 @@ smc_int32_t smc_thread_suspend(smc_thread_t *thread)
 
 	status = smc_cpu_disable_interrupt();
 	thread->stat = SMC_THREAD_SUSPEND;
-	
+
 	/* delete thread from ready thread queue */
 	smc_list_del_entry(&thread->rlist);
-	
+
 	/**
 	 * remove current thread timer from timer list
 	 */
@@ -196,9 +196,9 @@ smc_int32_t smc_thread_resume(smc_thread_t *thread)
 
 	smc_bitmap_set(thread->priority);
 	smc_cpu_enable_interrupt(status);
-	
+
 	smc_scheduler();
-	
+
 	return SMC_OK;
 }
 
