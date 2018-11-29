@@ -1,5 +1,5 @@
 /**
- * Author:   SMC<smcdef@163.com>
+ * Author:   songmuchun <smcdef@163.com>
  * Date:     2017-06-04
  * Describe: SMC-RTOS core code
  *

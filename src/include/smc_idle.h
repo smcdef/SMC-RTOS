@@ -1,5 +1,5 @@
 /**
- * Author:   SMC<smcdef@163.com>
+ * Author:   songmuchun <smcdef@163.com>
  * Date:     2017-06-12
  * Describe: This is part of SMC-RTOS for idle thread
  *

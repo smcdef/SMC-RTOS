@@ -1,5 +1,5 @@
 /**
- * Author:   SMC<smcdef@163.com>
+ * Author:   songmuchun <smcdef@163.com>
  * Date:     2017-06-02
  * Describe: all define and structure is here
  *

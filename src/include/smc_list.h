@@ -1,5 +1,5 @@
 /**
- * Author:   SMC<smcdef@163.com>
+ * Author:   songmuchun <smcdef@163.com>
  * Date:     2017-06-09
  * Describe: The implementation of doubly linked list for SMC-RTOS
  *

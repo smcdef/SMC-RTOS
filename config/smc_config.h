@@ -1,5 +1,5 @@
 /**
- * Author:   SMC<smcdef@163.com>
+ * Author:   songmuchun <smcdef@163.com>
  * Date:     2017-06-06
  * Describe: user configuration for SMC-RTOS
  *
@@ -10,14 +10,14 @@
 #ifndef SMC_CONFIG_H
 #define SMC_CONFIG_H
 
-#define SMC_TICKS_PER_SECOND             200  /* How many ticks are there in a second */
-#define SMC_PRIORITY_MAX                 32   /* SMC-RTOS support 32 priority for max */
-#define SMC_IDLE_STACK_SIZE              512  /* how many bytes for idle thread stack size */
+#define SMC_TICKS_PER_SECOND		200	/* How many ticks are there in a second */
+#define SMC_PRIORITY_MAX		32	/* SMC-RTOS support 32 priority for max */
+#define SMC_IDLE_STACK_SIZE		512	/* how many bytes for idle thread stack size */
 
 /**
  * user module configration
  */
-#define SMC_USING_SEMAPHORE                   /* using semaphore for SMC-RTOS */
-#define SMC_USING_CPU_USAGE                   /* using cpu usage for SMC-RTOS */
+#define SMC_USING_SEMAPHORE			/* using semaphore for SMC-RTOS */
+#define SMC_USING_CPU_USAGE			/* using cpu usage for SMC-RTOS */
 
 #endif // SMC_CONFIG_H

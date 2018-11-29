@@ -1,5 +1,5 @@
 /**
- * Author:   SMC<smcdef@163.com>
+ * Author:   songmuchun <smcdef@163.com>
  * Date:     2017-06-19
  * Describe: This is a part of SMC-RTOS, user can include this file to
  *           programe.
